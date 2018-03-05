@@ -1,0 +1,325 @@
+<meta charset="UTF-8">
+<link rel="stylesheet" href="test.css">
+<script src="../src/jquery-2.2.0.min.js"></script>
+<script src="../src/ChEx.js"></script>
+<script src="../src/content_script-simple.js"></script>
+<script>
+const emailHtml = (sender, num, type) => {
+    let email = `test${num}-${sender.subNum}@${sender.domain}`;
+    let name = `例${num}-${sender.subNum}`;
+    return `
+    <div class="vR">
+        <span class="vN bfK a3q" email="${email}">
+            <div class="vT">${name} (${email})</div>
+            <div class="vM"></div>
+        </span>
+        <input name="${type}" type="hidden" value="&quot;${name}&quot; <${email}>">
+    </div>
+    `
+};
+const sendersHtml = (opt) => `
+<div class="fX aXjCH" ${opt.isHidden ? 'style="display: none;"' : ''}>
+    <table class="GS">
+        <tbody>
+        <tr>
+            <td class="ok">
+                <div class="o1"><span class="gO aQY" role="link">To</span></div>
+            </td>
+            <td class="eV">
+                <div class="oj">
+                    <div class="wO nr">
+                        ${opt.to.map(sender => emailHtml(sender, opt.num, 'to')).join('')}
+                        <textarea rows="1" class="vO" name="to" aria-label="To" role="combobox" style="width: 49px;"></textarea>
+                        <div class="aA6"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="ok"><span class="gO aQY" aria-label="Cc - 連絡先の選択" role="link">Cc</span></td>
+            <td class="eV">
+                <div class="oj">
+                    <div class="wO nr">
+                        ${opt.cc.map(sender => emailHtml(sender, opt.num, 'cc')).join('')}
+                        <textarea rows="1" class="vO" name="cc" aria-label="Cc" role="combobox" style="width: 49px;"></textarea>
+                        <div class="aA6"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="ok"><span class="gO aQY" aria-label="Bcc - 連絡先の選択" role="link">Bcc</span></td>
+            <td class="eV">
+                <div class="oj">
+                    <div class="wO nr">
+                        ${opt.bcc.map(sender => emailHtml(sender, opt.num, 'bcc')).join('')}
+                        <textarea rows="1" class="vO" name="bcc" aria-label="Bcc" role="combobox" style="width: 49px;"></textarea>
+                        <div class="aA6"></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="ok az4"><label class="gO">From</label></td>
+            <td class="az3">
+                <div class="J-JN-M-I J-J5-Ji az2 az4 L3" role="button" aria-expanded="false" style="user-select: none;">
+                    <div class="J-J5-Ji J-JN-M-I-Jm" style="max-width: 333px;"><span dir="ltr" style="font-size: 14px; color: #777; margin: 7px; vertical-align: sub;">例0 &lt;test-0@ex.jp&gt;</span></div>
+                    <div class="J-J5-Ji J-JN-M-I-JG"></div>
+                </div>
+            </td>
+        </tr>
+        <tr style="display:none">
+            <td></td>
+            <td>
+                <div class="az7" style="user-select: none;"></div>
+                <div class="ow"></div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+`;
+const submitHtml = (num) => `
+    <div class="aDh">
+        <div class="J-J5-Ji">
+            <div id class="T-I J-J5-Ji aoO T-I-atl L3" role="button" tabindex="1" style="user-select: none;" onclick="alert('${num}. 送信しました')">送信</div>
+        </div>
+    </div>
+`;
+</script>
+
+<div style="width: 100%; height: 100%; overflow-y: scroll;">
+
+    <h2>1. 返信埋め込み パターン</h2>
+    <div class="gA gt">
+
+        <script>document.write(sendersHtml({
+            num: 1,
+            to: [
+                { subNum: 5, domain: 'ex.jp' },
+                { subNum: 1, domain: 'ex.jp' },
+                { subNum: 2, domain: 'exe.jp' },
+            ],
+            cc: [
+                { subNum: 3, domain: 'ex.jp' },
+            ],
+            bcc: [
+                { subNum: 4, domain: 'ex.jp' },
+            ],
+        }))</script>
+
+        <!-- 標題 -->
+        <div class="aoD az6"><input name="subjectbox" class="aoT" value="1. 返信埋め込み パターン"></div>
+
+        <!-- 添付ファイル -->
+        <div class="aoP GM" style="margin-top: 10px;">
+            <div class="dL">
+                <a class="dO" href="javascript:void(0)" target="_blank">
+                    <div class="vI">TestFile1-1.pdf</div>
+                    <div class="vJ">（711 KB）</div>
+                </a>
+            </div>
+        </div>
+        <div class="aoP GM">
+            <div class="dL">
+                <a class="dO" href="javascript:void(0)" target="_blank">
+                    <div class="vI">TestFile1-2.pdf</div>
+                    <div class="vJ">（712 KB）</div>
+                </a>
+            </div>
+        </div>
+        <hr>
+
+        <!-- 送信ボタン -->
+        <script>document.write(submitHtml(1))</script>
+    </div>
+
+
+    <h2>2. ポップアップ パターン</h2>
+    <div role="dialog" aria-labelledby="この属性の存在で判断">
+        <div class="aoC">
+            <script>document.write(sendersHtml({
+                num: 2,
+                to: [
+                    { subNum: 1, domain: 'ex.jp' },
+                    { subNum: 2, domain: 'exe.jp' },
+                ],
+                cc: [
+                    { subNum: 3, domain: 'ex.jp' },
+                ],
+                bcc: [
+                    { subNum: 4, domain: 'ex.jp' },
+                ],
+            }))</script>
+
+            <!-- 標題 -->
+            <div class="aoD az6"><input name="subjectbox" class="aoT" value="2. ポップアップ パターン"></div>
+
+            <!-- 添付ファイル -->
+            <div class="aoP GM" style="margin-top: 10px;">
+                <div class="dL">
+                    <a class="dO" href="javascript:void(0)" target="_blank">
+                        <div class="vI">TestFile2.pdf</div>
+                        <div class="vJ">（72 KB）</div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- 送信ボタン -->
+            <hr>
+            <script>document.write(submitHtml(2))</script>
+        </div>
+    </div>
+
+
+    <h2>3. ポップアップ＋「他２人」</h2>
+    <div role="dialog" aria-labelledby="この属性の存在で判断">
+        <div class="aoC">
+            <script>document.write(sendersHtml({
+                num: 3,
+                isHidden: true,
+                to: [
+                    { subNum: 1, domain: 'ex.jp' },
+                    { subNum: 2, domain: 'exe.jp' },
+                ],
+                cc: [
+                    { subNum: 3, domain: 'ex.jp' },
+                ],
+                bcc: [
+                    { subNum: 4, domain: 'ex.jp' },
+                ],
+            }))</script>
+            <div class="oL aDm az9" style="overflow: visible; word-wrap: break-word; white-space: pre-wrap; max-width: 451px; padding: 0 0 11px 4px;"><span email="test3-1@ex.jp">例1 (test-3-1@ex.jp)</span>, <span email="test3-1@exe.jp">例2 (test3-2@exe.jp)</span><span class="aDp">他 2 人（BCC 1 人）</span></div>
+            <div class="bgW">
+                <span id=":hm" role="button" tabindex="-1" aria-hidden="true" class="bcV" style="visibility:hidden"></span>
+            </div>
+            <hr>
+
+            <!-- 標題 -->
+            <div class="aoD az6"><input name="subjectbox" class="aoT" value="3. ポップアップ＋「他２人」"></div>
+
+            <!-- 送信ボタン -->
+            <script>document.write(submitHtml(3))</script>
+        </div>
+    </div>
+
+
+
+    <h2>4. 添付中(ボタンが反応しないこと)</h2>
+    <div class="gA gt">
+
+        <script>document.write(sendersHtml({
+            num: 4,
+            to: [
+                { subNum: 1, domain: 'ex.jp' },
+            ],
+            cc: [],
+            bcc: [],
+        }))</script>
+
+        <!-- 標題 -->
+        <div class="aoD az6"><input name="subjectbox" class="aoT" value="4. 添付中"></div>
+
+        <!-- 添付中 -->
+        <div class="aoP GM" style="margin-top: 10px;">
+            <div class="dL">
+                <table cellpadding="0" class="cf ec">
+                    <tbody>
+                    <tr>
+                        <td class="vW">
+                            <span class="dT"><div class="vI">TestFile.pdf</div> <div class="vJ">（16,709 KB）</div></span>
+                        </td>
+                        <td class="vW">
+                            <div class="dQ">
+                                <div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="40" class="dR" style="width: 40%;"></div>
+                            </div>
+                        </td>
+                        <td class="vW">
+                            <div role="link" class="vq"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 送信ボタン -->
+        <hr>
+        <script>document.write(submitHtml(4))</script>
+    </div>
+
+
+    <h2>5. 表題未入力</h2>
+    <div class="gA gt">
+
+        <script>document.write(sendersHtml({
+            num: 5,
+            to: [
+                { subNum: 1, domain: 'ex.jp' },
+            ],
+            cc: [],
+            bcc: [],
+        }))</script>
+
+        <!-- 標題 -->
+        <div class="aoD az6"><input name="subjectbox" class="aoT" value=""></div>
+
+        <!-- 送信ボタン -->
+        <script>document.write(submitHtml(5))</script>
+    </div>
+
+
+    <h2>6. to未入力</h2>
+    <div class="gA gt">
+
+        <script>document.write(sendersHtml({
+            num: 6,
+            to: [],
+            cc: [
+                { subNum: 1, domain: 'ex.jp' },
+            ],
+            bcc: [],
+        }))</script>
+
+        <!-- 標題 -->
+        <div class="aoD az6"><input name="subjectbox" class="aoT" value="6. to未入力"></div>
+
+        <!-- 送信ボタン -->
+        <script>document.write(submitHtml(6))</script>
+    </div>
+
+
+    <h2>7. 長い</h2>
+    <div class="gA gt">
+
+        <script>
+            let senders = [];
+            for (let i = 0; i < 100; i++) {
+                senders.push({ subNum: i + 1, domain: 'ex.jp' });
+            }
+        </script>
+        <script>document.write(sendersHtml({
+            num: 7,
+            to: senders,
+            cc: [],
+            bcc: [],
+        }))</script>
+
+        <!-- 標題 -->
+        <div class="aoD az6"><input name="subjectbox" class="aoT" value="6. to未入力"></div>
+
+        <!-- 送信ボタン -->
+        <script>document.write(submitHtml(6))</script>
+    </div>
+
+
+</div>
+
+<script>
+    chrome.i18n = {};
+    chrome.i18n.__msg = {};
+    $.getJSON('../src/_locales/ja/messages.json', {}, function (data) {
+        chrome.i18n.__msg = data;
+    });
+    chrome.i18n.getMessage = key => chrome.i18n.__msg[key].message;
+</script>

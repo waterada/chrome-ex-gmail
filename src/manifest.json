@@ -1,0 +1,19 @@
+{
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDesc__",
+  "version": "0.2",
+  "manifest_version": 2,
+  "icons": {
+    "16":  "icon.png",
+    "48":  "icon.png",
+    "128": "icon.png"
+  },
+  "content_scripts": [{
+    "matches": ["https://mail.google.com/*"],
+    "js": ["jquery-2.2.0.min.js", "content_script.js"]
+  }],
+  "default_locale": "ja",
+  "permissions": [
+    "https://mail.google.com/*"
+  ]
+}

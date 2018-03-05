@@ -1,0 +1,11 @@
+{
+    "extName": { "message": "Pre-sending Checker for Gmail" },
+    "extDesc": { "message": "Allows to pop up all lists easy to check whether or not any wrong addresses in TO/CC/BCC in your Gmail." },
+    "subject": { "message": "Subject" },
+    "noSubject": { "message": "The subject is blank." },
+    "noTo": { "message": "The To is blank." },
+    "attached": { "message": "Attachments" },
+    "confirmButton": { "message": "Check" },
+    "sendButton": { "message": "Send" },
+    "dialogTitle": { "message": "Click each gray boxes to make them green." }
+}

@@ -1,0 +1,11 @@
+{
+    "extName": { "message": "Gmail送信前チェッカー" },
+    "extDesc": { "message": "Gmail の誤送信対策の拡張です。Gmail でメールを送る際、TO/CC/BCC に間違ったお客様のアドレスを追加してしまわないように、ポップアップで TO/CC/BCC の内容を判りやすく確認することができるようになります。 " },
+    "subject": { "message": "標題" },
+    "noSubject": { "message": "標題が空欄になっています" },
+    "noTo": { "message": "To が空欄になっています" },
+    "attached": { "message": "添付" },
+    "confirmButton": { "message": "確認" },
+    "sendButton": { "message": "送信" },
+    "dialogTitle": { "message": "グレーの各項目をクリックして緑色に変えてください。" }
+}
